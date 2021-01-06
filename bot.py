@@ -1,20 +1,28 @@
+#Licenced under MIT License
+#charset = "utf-8"
+#Language = "Python3"
+#Bot Framework = "python-telegram-bot"
+#The Code is without Proxy, Actual code contains Proxy
+#Proxy should be used is of the type SOCKS5
+#Special thanks to cyberboySumanjay
+#The bot will work till you press ctrl+c in the terminal or command line.,
+
+#import the required files
 import requests
 import logging
 from telegram import *
 from telegram.ext import *
-import os
 
-PORT = int(os.environ.get('PORT', 5000))
-
-
+#enable logger (optional)
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
 
 logger = logging.getLogger(__name__)
 
-TOKEN = "1355356462:AAFGOK3rX5_uqKO0BxCPEqvjakIYi9o8XxU"
+TOKEN = "YOUR API TOKEN HERE"
 
+#CommandHandler for message "Start"
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(f"""*Hi {update.effective_chat.first_name},* 
 
@@ -24,12 +32,14 @@ Type /help to know how to use the bot.
 
 Type /info to know about the developer.""", parse_mode=ParseMode.MARKDOWN)
 
+#CommandHandler for message "Help"
 def help(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("""Hey, this is not most complicated bot. Just send me the query you want to search and i will do the rest!
 
-This bot is in the *BETA* stage. So, if any error occurs, feel free to pm me on @cosmicpredator""", parse_mode=ParseMode.MARKDOWN)
+This bot is in the *BETA* stage. So, if any error occurs, feel free to pm me on {YOUR NAME HERE}""", parse_mode=ParseMode.MARKDOWN)
 
 
+#CommandHandler to get torrents for the query
 def torr_serch(update: Update, context: CallbackContext) -> None:
     try:
         update.message.reply_text("Searching results for {}".format(update.message.text))
@@ -56,9 +66,10 @@ _Uploaded {age} ago_
         update.message.reply_text("""Search results completed...
 If you've not seen any results, try researching...!""")
 
-
+#CommandHnadler for message "info"
 def info(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text("""*Made with ❤️ in India by @cosmicpredator.*
+    #Never Mind :-)
+    update.message.reply_text("""*Made with ❤️ in India by {YOUR NAME}.*
 
 *Language:* [Python3](https://www.python.org/)
 
@@ -70,7 +81,7 @@ def info(update: Update, context: CallbackContext) -> None:
 
 If you 👍 this bot, Support the developer by just sharing the bot to Your friends...""", parse_mode=ParseMode.MARKDOWN)
 
-
+#Add all handlers to the main function.
 def main() -> None:
     updater = Updater(TOKEN, use_context=True)
     dispatcher = updater.dispatcher
@@ -78,21 +89,9 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler("help", help))
     dispatcher.add_handler(CommandHandler("info", info))
     dispatcher.add_handler(MessageHandler(Filters.text & (~Filters.command), torr_serch))
-    updater.start_webhook(listen="0.0.0.0",
-                          port=int(PORT),
-                          url_path=TOKEN)
-    updater.bot.setWebhook('https://protected-shelf-35703.herokuapp.com/' + TOKEN)
-
+    updater.start_polling() #set bot to polling, if you use webhooks, replace this statement with the url of webhook.,
     updater.idle()
 
+#Call the main function
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
